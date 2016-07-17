@@ -7,13 +7,23 @@ namespace WouterJ\Peg;
  */
 final class Result
 {
-    private $str;
+    private $value;
+    private $length;
     private $offset;
+    private $match = true;
 
-    public static function match($str, $offset)
+    /**
+     * @param int   $length The length of the match (used to determine new offset)
+     * @param mixed $value  The value of the definition
+     * @param int   $offset The start offset
+     *
+     * @return Result
+     */
+    public static function match($length, $value, $offset)
     {
         $result = new self();
-        $result->str = $str;
+        $result->length = $length;
+        $result->value = $value;
         $result->offset = $offset;
 
         return $result;
@@ -23,22 +33,33 @@ final class Result
     {
         $match = new self();
         $match->offset = $offset;
+        $match->match = false;
 
         return $match;
     }
 
+    public function offset()
+    {
+        return $this->offset;
+    }
+
+    public function length()
+    {
+        return $this->length;
+    }
+
     public function newOffset()
     {
-        return $this->offset + strlen($this->str);
+        return $this->offset + $this->length;
     }
 
     public function isMatch()
     {
-        return null !== $this->str;
+        return $this->match;
     }
 
-    public function str()
+    public function value()
     {
-        return $this->str;
+        return $this->value;
     }
 }

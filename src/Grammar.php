@@ -32,6 +32,6 @@ class Grammar
             return null;
         }
 
-        return $result->str();
+        return $result->value();
     }
 }

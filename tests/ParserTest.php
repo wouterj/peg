@@ -14,7 +14,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $r = $parser->parse('Letter', 'a');
-        $this->assertEquals('a', $r->str());
+        $this->assertEquals('a', $r->value());
         $this->assertEquals(1, $r->newOffset());
         $this->assertFalse($parser->parse('Letter', 'b')->isMatch());
     }
@@ -27,7 +27,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $r = $parser->parse('SingleLetterWord', 'a');
-        $this->assertEquals('a', $r->str());
+        $this->assertEquals('a', $r->value());
         $this->assertEquals(1, $r->newOffset());
         $this->assertFalse($parser->parse('SingleLetterWord', 'b')->isMatch());
     }
@@ -38,15 +38,15 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             new Definition('Word', ['repeat', ['literal', 'a']]),
         ]);
 
-        $this->assertEquals('a', $parser->parse('Word', 'a')->str());
-        $this->assertEquals('aaaa', $parser->parse('Word', 'aaaa')->str());
+        $this->assertEquals('a', $parser->parse('Word', 'a')->value());
+        $this->assertEquals('aaaa', $parser->parse('Word', 'aaaa')->value());
 
         $r = $parser->parse('Word', 'aabc');
-        $this->assertEquals('aa', $r->str());
+        $this->assertEquals('aa', $r->value());
         $this->assertEquals(2, $r->newOffset());
 
         $r = $parser->parse('Word', 'bcaa');
-        $this->assertEquals('', $r->str());
+        $this->assertEquals('', $r->value());
         $this->assertEquals(0, $r->newOffset());
     }
 
@@ -57,16 +57,16 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertFalse($parser->parse('Word', 'a')->isMatch());
-        $this->assertEquals('aa', $parser->parse('Word', 'aa')->str());
+        $this->assertEquals('aa', $parser->parse('Word', 'aa')->value());
 
         $r = $parser->parse('Word', 'aaa');
-        $this->assertEquals('aaa', $r->str());
+        $this->assertEquals('aaa', $r->value());
         $this->assertEquals(3, $r->newOffset());
 
-        $this->assertEquals('aaaa', $parser->parse('Word', 'aaaa')->str());
+        $this->assertEquals('aaaa', $parser->parse('Word', 'aaaa')->value());
 
         $r = $parser->parse('Word', 'aaaaa');
-        $this->assertEquals('aaaa', $r->str());
+        $this->assertEquals('aaaa', $r->value());
         $this->assertEquals(4, $r->newOffset());
     }
 
@@ -76,10 +76,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             new Definition('Digit', ['characterClass', '0-9']),
         ]);
 
-        $this->assertEquals('3', $parser->parse('Digit', '3')->str());
+        $this->assertEquals('3', $parser->parse('Digit', '3')->value());
 
         $r = $parser->parse('Digit', '9');
-        $this->assertEquals('9', $r->str());
+        $this->assertEquals('9', $r->value());
         $this->assertEquals(1, $r->newOffset());
 
         $this->assertFalse($parser->parse('Digit', 'a')->isMatch());
@@ -97,7 +97,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $r = $parser->parse('Sum', '3+3');
-        $this->assertEquals('3+3', $r->str());
+        $this->assertEquals('3+3', $r->value());
         $this->assertEquals(3, $r->newOffset());
 
         $this->assertFalse($parser->parse('Sum', '3-5')->isMatch());
@@ -113,10 +113,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             ]]),
         ]);
 
-        $this->assertEquals('1', $parser->parse('OneOrTwo', '1')->str());
+        $this->assertEquals('1', $parser->parse('OneOrTwo', '1')->value());
 
         $r = $parser->parse('OneOrTwo', '2');
-        $this->assertEquals('2', $r->str());
+        $this->assertEquals('2', $r->value());
         $this->assertEquals(1, $r->newOffset());
 
         $this->assertFalse($parser->parse('OneOrTwo', '3')->isMatch());
@@ -128,11 +128,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             new Definition('Everything', ['any']),
         ]);
 
-        $this->assertEquals('1', $parser->parse('Everything', '1')->str());
-        $this->assertEquals('a', $parser->parse('Everything', 'a')->str());
+        $this->assertEquals('1', $parser->parse('Everything', '1')->value());
+        $this->assertEquals('a', $parser->parse('Everything', 'a')->value());
 
         $r = $parser->parse('Everything', '?');
-        $this->assertEquals('?', $r->str());
+        $this->assertEquals('?', $r->value());
         $this->assertEquals(1, $r->newOffset());
     }
 
@@ -162,5 +162,17 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $r->newOffset());
 
         $this->assertFalse($parser->parse('LetterA', 'b')->isMatch());
+    }
+
+    public function testActions()
+    {
+        $parser = new Parser([
+            new Definition('Int', ['repeat', ['identifier', 'Digit'], 1], function ($values) {
+                return (int) implode('', $values);
+            }),
+            new Definition('Digit', ['characterClass', '0-9']),
+        ]);
+
+        $this->assertSame(12, $parser->parse('Int', '12')->value());
     }
 }
