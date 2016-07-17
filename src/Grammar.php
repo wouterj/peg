@@ -2,9 +2,9 @@
 
 namespace WouterJ\Peg;
 
-use WouterJ\Peg\Handler;
-
 /**
+ * The main entry point of the Peg library.
+ *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
 class Grammar
@@ -14,7 +14,7 @@ class Grammar
     private $parser;
 
     /**
-     * @param string       $mainDefinitionId
+     * @param string       $mainDefinitionId The definition to use as top-level
      * @param Definition[] $definitions
      */
     public function __construct($mainDefinitionId, array $definitions)
@@ -24,6 +24,18 @@ class Grammar
         $this->parser = new Parser($definitions);
     }
 
+    /**
+     * Parses the input string using the defined grammar.
+     *
+     * The return value is one of:
+     *   `null`   there is no match
+     *   `string` the consumed part of the string
+     *   `mixed`  the value returned by the PEG actions defined in the grammar
+     *
+     * @param string $input
+     *
+     * @return null|string|mixed
+     */
     public function parse($input)
     {
         $result = $this->parser->parse($this->mainDefinitionId, $input);

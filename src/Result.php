@@ -3,6 +3,8 @@
 namespace WouterJ\Peg;
 
 /**
+ * This class is returned from all parse* methods in the Parser.
+ *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
 final class Result
@@ -17,7 +19,7 @@ final class Result
      * @param mixed $value  The value of the definition
      * @param int   $offset The start offset
      *
-     * @return Result
+     * @return self
      */
     public static function match($length, $value, $offset)
     {
@@ -29,6 +31,11 @@ final class Result
         return $result;
     }
 
+    /**
+     * @param int $offset The start offset
+     *
+     * @return self
+     */
     public static function noMatch($offset)
     {
         $match = new self();
@@ -43,23 +50,23 @@ final class Result
         return $this->offset;
     }
 
-    public function length()
-    {
-        return $this->length;
-    }
-
     public function newOffset()
     {
         return $this->offset + $this->length;
     }
 
-    public function isMatch()
+    public function length()
     {
-        return $this->match;
+        return $this->length;
     }
 
     public function value()
     {
         return $this->value;
+    }
+
+    public function isMatch()
+    {
+        return $this->match;
     }
 }

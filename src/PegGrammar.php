@@ -3,6 +3,8 @@
 namespace WouterJ\Peg;
 
 /**
+ * A subclass of Grammar for the PEG syntax.
+ *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
 class PegGrammar extends Grammar
