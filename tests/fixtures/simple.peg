@@ -1,0 +1,6 @@
+Sentence      <- Word+
+Word          <- Letter+ Spacing
+Letter        <- [a-zA-Z]
+Spacing       <- ' ' / EndOfSentence / EndOfInput
+EndOfSentence <- '.' / '!' / '?' / '?!'
+EndOfInput    <- !.

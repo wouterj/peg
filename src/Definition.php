@@ -35,7 +35,7 @@ final class Definition
         $originalValue = [$value];
         if (is_array($value)) {
             $originalValue = $value;
-            $value = static::flattenArray($value);
+            $value = Util::flattenArray($value);
         }
 
         if ($this->action) {
@@ -43,22 +43,5 @@ final class Definition
         }
 
         return is_array($value) ? implode('', $value) : $value;
-    }
-
-    private static function flattenArray(array $array)
-    {
-        $result = [];
-
-        foreach ($array as $item) {
-            if (is_array($item)) {
-                $result = array_merge($result, static::flattenArray($item));
-
-                continue;
-            }
-
-            $result[] = $item;
-        }
-
-        return $result;
     }
 }

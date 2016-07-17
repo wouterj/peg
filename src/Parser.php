@@ -23,6 +23,9 @@ final class Parser
     /** @return Result */
     public function parse($definitionId, $input, $offset = 0)
     {
+        if (!isset($this->definitions[$definitionId])) {
+            throw new \LogicException(sprintf('Unknown definition `%s`.', $definitionId));
+        }
         $definition = $this->definitions[$definitionId];
 
         try {
@@ -41,6 +44,7 @@ final class Parser
     /** @return Result */
     private function parseOperator($operator, $input, $offset)
     {
+        if (is_array($operator[0])) var_dump($operator[0]);
         $method = 'parse'.ucfirst($operator[0]);
         if (method_exists($this, $method)) {
             return $this->$method($operator, $input, $offset);
