@@ -62,8 +62,8 @@ class GrammarTest extends \PHPUnit_Framework_TestCase
                 ['literal', '+'],
                 ['repeat', ['identifier', 'Spacing'], 0, 1],
                 ['identifier', 'Number'],
-            ]], function ($val) {
-                return array_sum(array_filter($val, 'is_float'));
+            ]], function ($nested) {
+                return array_sum(array_filter(Util::flattenArray($nested), 'is_float'));
             }),
             new Definition('Number', ['sequence', [
                 ['repeat', ['identifier', 'Digit'], 1],
@@ -71,13 +71,11 @@ class GrammarTest extends \PHPUnit_Framework_TestCase
                     ['literal', '.'],
                     ['repeat', ['identifier', 'Digit'], 1],
                 ]], 0, 1],
-            ]], function ($values) {
-                return (float) implode('', $values);
+            ]], function ($nested) {
+                return (float) implode('', Util::flattenArray($nested));
             }),
             new Definition('Digit', ['characterClass', '0-9']),
-            new Definition('Spacing', ['characterClass', '\s'], function () {
-                return null;
-            }),
+            new Definition('Spacing', ['characterClass', '\s']),
         ]);
 
         $this->assertEquals(6, $grammar->parse('3 + 3'));

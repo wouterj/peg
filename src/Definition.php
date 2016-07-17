@@ -32,16 +32,12 @@ final class Definition
 
     public function call($value)
     {
-        $originalValue = [$value];
-        if (is_array($value)) {
-            $originalValue = $value;
-            $value = Util::flattenArray($value);
-        }
+        $value = (array) $value;
 
         if ($this->action) {
-            return call_user_func($this->action, $value, $originalValue);
+            return call_user_func($this->action, $value);
         }
 
-        return is_array($value) ? implode('', $value) : $value;
+        return is_array($value) ? implode('', Util::flattenArray($value)) : $value;
     }
 }

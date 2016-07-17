@@ -15,7 +15,7 @@ class PegGrammar extends Grammar
                 ['identifier', 'Spacing'],
                 ['repeat', ['identifier', 'Definition'], 1],
                 ['identifier', 'EndOfFile'],
-            ]], function ($value, $nested) {
+            ]], function ($nested) {
                 $definitions = $nested[1];
 
                 return new Grammar($definitions[0]->identifier(), $definitions);
@@ -25,7 +25,7 @@ class PegGrammar extends Grammar
                 ['identifier', 'Identifier'],
                 ['identifier', 'LEFTARROW'],
                 ['identifier', 'Expression'],
-            ]], function ($value, $nested) {
+            ]], function ($nested) {
                 $definitionId = $nested[0][1];
                 $expression = $nested[2];
 
@@ -39,7 +39,7 @@ class PegGrammar extends Grammar
                     ['identifier', 'SLASH'],
                     ['identifier', 'Sequence']
                 ]]],
-            ]], function ($value, $nested) {
+            ]], function ($nested) {
                 if (0 === count($nested[1])) {
                     return $nested[0];
                 }
@@ -47,7 +47,7 @@ class PegGrammar extends Grammar
                 return ['choice', array_merge([$nested[0]], array_map('next', $nested[1]))];
             }),
             // Sequence <- Prefix*
-            new Definition('Sequence', ['repeat', ['identifier', 'Prefix']], function ($value, $nested) {
+            new Definition('Sequence', ['repeat', ['identifier', 'Prefix']], function ($nested) {
                 $prefixes = Util::nonNull($nested);
                 if (1 === count($prefixes)) {
                     return $prefixes[0];
@@ -62,7 +62,7 @@ class PegGrammar extends Grammar
                     ['identifier', 'NOT'],
                 ]], 0, 1],
                 ['identifier', 'Suffix'],
-            ]], function ($value, $nested) {
+            ]], function ($nested) {
                 if ([] === $nested[0]) {
                     return $nested[1];
                 }
@@ -83,7 +83,7 @@ class PegGrammar extends Grammar
                     ['identifier', 'STAR'],
                     ['identifier', 'PLUS'],
                 ]], 0, 1],
-            ]], function ($value, $nested) {
+            ]], function ($nested) {
                 if ([] === $nested[1]) {
                     return $nested[0];
                 }
@@ -124,7 +124,7 @@ class PegGrammar extends Grammar
                 ['identifier', 'Literal'],
                 ['identifier', 'Class'],
                 ['identifier', 'DOT'],
-            ]], function ($value, $nested) {
+            ]], function ($nested) {
                 if (is_string($nested[0]) && '.' === rtrim($nested[0])) {
                     return ['any'];
                 }
@@ -147,7 +147,7 @@ class PegGrammar extends Grammar
                 ['identifier', 'IdentStart'],
                 ['repeat', ['identifier', 'IdentCont']],
                 ['identifier', 'Spacing'],
-            ]], function ($value, $nested) {
+            ]], function ($nested) {
                 return ['identifier', implode('', array_merge([$nested[0]], $nested[1]))];
             }),
             // IdentStart <- [a-zA-Z_]
@@ -178,7 +178,7 @@ class PegGrammar extends Grammar
                     ['literal', '"'],
                     ['identifier', 'Spacing'],
                 ]],
-            ]], function ($value, $nested) {
+            ]], function ($nested) {
                 return ['literal', implode('', array_map('next', $nested[1]))];
             }),
             // Class <- ’[’ (!’]’ Range)* ’]’ Spacing
@@ -190,7 +190,7 @@ class PegGrammar extends Grammar
                 ]]],
                 ['literal', ']'],
                 ['identifier', 'Spacing'],
-            ]], function ($value, $nested) {
+            ]], function ($nested) {
                 $characters = implode('', array_filter(Util::flattenArray($nested[1]), function ($v) { return $v !== null; }));
 
                 return ['characterClass', $characters];

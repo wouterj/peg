@@ -167,8 +167,8 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     public function testActions()
     {
         $parser = new Parser([
-            new Definition('Int', ['repeat', ['identifier', 'Digit'], 1], function ($values) {
-                return (int) implode('', $values);
+            new Definition('Int', ['repeat', ['identifier', 'Digit'], 1], function ($nested) {
+                return (int) implode('', Util::flattenArray($nested));
             }),
             new Definition('Digit', ['characterClass', '0-9']),
         ]);
