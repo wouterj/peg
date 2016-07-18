@@ -69,7 +69,7 @@ final class Parser
      */
     private function parseOperator($operator, $input, $offset)
     {
-        $method = 'parse'.ucfirst($operator[0]);
+        $method = 'parse'.$operator[0];
         if (method_exists($this, $method)) {
             return $this->$method($operator, $input, $offset);
         }
