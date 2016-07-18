@@ -2,6 +2,9 @@
 
 namespace WouterJ\Peg;
 
+use WouterJ\Peg\Exception\DefinitionException;
+use WouterJ\Peg\Exception\OperatorException;
+
 /**
  * The parser of input strings.
  *
@@ -36,7 +39,7 @@ final class Parser
     public function parse($definitionId, $input, $offset = 0)
     {
         if (!isset($this->definitions[$definitionId])) {
-            throw new \LogicException(sprintf('Unknown definition `%s`.', $definitionId));
+            throw DefinitionException::undefined($definitionId, array_keys($this->definitions));
         }
         $definition = $this->definitions[$definitionId];
 
@@ -48,8 +51,8 @@ final class Parser
             }
 
             return Result::match($result->length(), $definition->call($result->value()), $result->offset());
-        } catch (\LogicException $e) {
-            throw new \LogicException(sprintf('Invalid definition `%s`: %s', $definitionId, $e->getMessage()), 0, $e);
+        } catch (OperatorException $e) {
+            throw DefinitionException::invalid($definitionId, $e);
         }
     }
 
@@ -71,7 +74,7 @@ final class Parser
             return $this->$method($operator, $input, $offset);
         }
 
-        throw new \LogicException(sprintf('Undefined operator `%s`.', $operator[0]));
+        throw OperatorException::undefined($operator[0]);
     }
 
     /**

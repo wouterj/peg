@@ -2,6 +2,8 @@
 
 namespace WouterJ\Peg;
 
+use WouterJ\Peg\Exception\DefinitionException;
+
 /**
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
@@ -174,5 +176,34 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertSame(12, $parser->parse('Int', '12')->value());
+    }
+
+    /**
+     * @expectedException \WouterJ\Peg\Exception\DefinitionException
+     * @expectedExceptionMessage did you mean one of these `Everything`?
+     */
+    public function testUnknownDefinition()
+    {
+        $parser = new Parser([
+            new Definition('Everything', ['any']),
+            new Definition('Digit', ['characterClass', '0-9']),
+        ]);
+
+        $parser->parse('Everyting', 'a');
+    }
+
+    /**
+     * @expectedException \WouterJ\Peg\Exception\DefinitionException
+     * @expectedExceptionMessageRegExp /^Invalid definition `Foo`: Undefined operator `undefined`\./
+     */
+    public function testInvalidDefinition()
+    {
+        $parser = new Parser([
+            new Definition('Mine', ['identifier', 'Custom']),
+            new Definition('Custom', ['identifier', 'Foo']),
+            new Definition('Foo', ['undefined']),
+        ]);
+
+        $parser->parse('Mine', 'a');
     }
 }
