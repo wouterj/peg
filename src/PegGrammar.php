@@ -39,7 +39,7 @@ class PegGrammar extends Grammar
                 ['identifier', 'Sequence'],
                 ['repeat', ['sequence', [
                     ['identifier', 'SLASH'],
-                    ['identifier', 'Sequence']
+                    ['identifier', 'Sequence'],
                 ]]],
             ]], function ($nested) {
                 if (0 === count($nested[1])) {
@@ -292,7 +292,7 @@ class PegGrammar extends Grammar
                 'choice', [
                     ['identifier', 'Space'],
                     ['identifier', 'Comment'],
-                ]
+                ],
             ]]),
             // Comment <- ’#’ (!EndOfLine .)* EndOfLine
             new Definition('Comment', ['sequence', [
