@@ -1,4 +1,0 @@
-suites:
-    default:
-        namespace: WouterJ\Peg
-        psr4_prefix: WouterJ\Peg
