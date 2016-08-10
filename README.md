@@ -76,6 +76,10 @@ EOG
 $grammar->parse('1039.50'); // 1039.50
 ```
 
+For information about the PEG syntax, see
+[Parsing Expression Grammars: A Recognition-Based Syntactic Foundation](http://bford.info/pub/lang/peg.pdf)
+by Bryan Ford.
+
 License
 -------
 
