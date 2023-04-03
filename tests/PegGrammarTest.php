@@ -11,10 +11,12 @@
 
 namespace WouterJ\Peg;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-class PegGrammarTest extends \PHPUnit_Framework_TestCase
+class PegGrammarTest extends TestCase
 {
     /** @dataProvider getGrammars */
     public function testGrammar($filePath)
@@ -29,7 +31,7 @@ class PegGrammarTest extends \PHPUnit_Framework_TestCase
     public function getGrammars()
     {
         return [
-            //[__DIR__.'/fixtures/example1.peg'],
+            [__DIR__.'/fixtures/example1.peg'],
             [__DIR__.'/fixtures/simple.peg'],
         ];
     }
