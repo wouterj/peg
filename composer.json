@@ -1,5 +1,5 @@
 {
-    "name": "wouterj/peg",
+    "name": "yisus/peg",
     "description": "A PEG parser for PHP",
     "license": "BSD-3-Clause",
     "authors": [
@@ -8,11 +8,9 @@
             "email": "wouter@wouterj.nl"
         }
     ],
-
     "require": {
-        "php": "^7.0"
+        "php": "^8.0"
     },
-
     "autoload": {
         "psr-4": { "WouterJ\\Peg\\": "src/" }
     },
