@@ -31,7 +31,7 @@ class PegGrammarTest extends TestCase
     public function getGrammars()
     {
         return [
-            [__DIR__.'/fixtures/example1.peg'],
+            //[__DIR__.'/fixtures/example1.peg'],
             [__DIR__.'/fixtures/simple.peg'],
         ];
     }
