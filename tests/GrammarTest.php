@@ -11,10 +11,12 @@
 
 namespace WouterJ\Peg;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-class GrammarTest extends \PHPUnit_Framework_TestCase
+class GrammarTest extends TestCase
 {
     public function testPredicates()
     {

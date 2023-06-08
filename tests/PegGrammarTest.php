@@ -11,10 +11,12 @@
 
 namespace WouterJ\Peg;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-class PegGrammarTest extends \PHPUnit_Framework_TestCase
+class PegGrammarTest extends TestCase
 {
     /** @dataProvider getGrammars */
     public function testGrammar($filePath)

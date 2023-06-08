@@ -8,15 +8,16 @@
             "email": "wouter@wouterj.nl"
         }
     ],
-
     "require": {
-        "php": "^7.0"
+        "php": "^8.0"
     },
-
     "autoload": {
         "psr-4": { "WouterJ\\Peg\\": "src/" }
     },
     "autoload-dev": {
         "psr-4": { "WouterJ\\Peg\\": "tests/" }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
     }
 }

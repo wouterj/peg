@@ -55,7 +55,7 @@ class PegGrammar extends Grammar
                     return $nested[0];
                 }
 
-                return ['choice', array_merge([$nested[0]], array_map('next', $nested[1]))];
+                return ['choice', array_merge([$nested[0]], array_map(fn($param) => next($param), $nested[1]))];
             }),
             // Sequence <- Prefix*
             new Definition('Sequence', ['repeat', ['identifier', 'Prefix']], function ($nested) {
@@ -190,7 +190,7 @@ class PegGrammar extends Grammar
                     ['identifier', 'Spacing'],
                 ]],
             ]], function ($nested) {
-                return ['literal', implode('', array_map('next', $nested[1]))];
+                return ['literal', implode('', array_map(fn($param) => next($param), $nested[1]))];
             }),
             // Class <- ’[’ (!’]’ Range)* ’]’ Spacing
             new Definition('Class', ['sequence', [

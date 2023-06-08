@@ -12,11 +12,12 @@
 namespace WouterJ\Peg;
 
 use WouterJ\Peg\Exception\DefinitionException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends TestCase
 {
     public function testLiteral()
     {
@@ -187,12 +188,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(12, $parser->parse('Int', '12')->value());
     }
 
-    /**
-     * @expectedException \WouterJ\Peg\Exception\DefinitionException
-     * @expectedExceptionMessage did you mean one of these `Everything`?
-     */
     public function testUnknownDefinition()
     {
+        $this->expectExceptionMessage("did you mean one of these `Everything`?");
+        $this->expectException(\WouterJ\Peg\Exception\DefinitionException::class);
+
         $parser = new Parser([
             new Definition('Everything', ['any']),
             new Definition('Digit', ['characterClass', '0-9']),
@@ -201,12 +201,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $parser->parse('Everyting', 'a');
     }
 
-    /**
-     * @expectedException \WouterJ\Peg\Exception\DefinitionException
-     * @expectedExceptionMessageRegExp /^Invalid definition `Foo`: Undefined operator `undefined`\./
-     */
     public function testInvalidDefinition()
     {
+        $this->expectExceptionMessageMatches("/^Invalid definition `Foo`: Undefined operator `undefined`\./");
+        $this->expectException(\WouterJ\Peg\Exception\DefinitionException::class);
+
         $parser = new Parser([
             new Definition('Mine', ['identifier', 'Custom']),
             new Definition('Custom', ['identifier', 'Foo']),
